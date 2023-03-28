@@ -1,0 +1,72 @@
+/* components/ImageDropZone.css */
+.dropZone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 300px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.dropZone:hover {
+  border-color: #0070f3;
+}
+
+.dropZone p {
+  text-align: center;
+  margin: 0;
+	color: grey;
+}
+
+.fileInput {
+  display: none;
+}
+
+.loading {
+	/* border: 1px solid #ccc; */
+  display: inline-block;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  animation: rotation 1.5s linear infinite;
+}
+
+.loading .circle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #000;
+  transform-origin: 12.5px 12.5px;
+}
+
+.loading .circle:nth-child(1) {
+  top: 50%;
+  left: -40%;
+  transform: translateY(-50%);
+}
+
+.loading .circle:nth-child(2) {
+  top: 0%; /* Adjusts top position to form an equilateral triangle */
+  left: 60%;
+  transform: translateY(-50%);
+}
+
+.loading .circle:nth-child(3) {
+  top: 100%; /* Adjusts top position to form an equilateral triangle */
+  left: 60%;
+  transform: translateY(-50%);
+}
+
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
