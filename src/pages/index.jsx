@@ -12,26 +12,42 @@ export default function Home() {
 
 	const [loading, setLoading] = useState(false);
 	const [imgURL, setImgURL] = useState(null);
+	const [spotyData, setSpotyData] = useState(null);
 
-
-	const handleTranslate = async () => {
+	const handleDiscover = async () => {
 		if(!imgURL) {
 			alert("Please upload a video");
 			return;
 		}
 
 		setLoading(true);
-		await sleep(10_000);
-		const urlImg = '/video_with_captions.mp4';
+		// call the API
+		const response = await fetch('/api/discover', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ url: imgURL })
+		});
+		const data = await response.json();
+		setSpotyData(data);
+
 		setLoading(false);
-		setImgURL(urlImg);
+
+		console.log('data: ', data);
+
 	}
 
 
-	const handleVideoChange = async (newImg) => {
-		const urlImg = URL.createObjectURL(newImage);
+	const handleImgChange = async (newImg) => {
+		const urlImg = URL.createObjectURL(newImg);
     setImgURL(urlImg);
   };
+
+	const handleInputChange = (e) => {
+		const url = e.target.value;
+		setImgURL(url);
+	}
 
   return (
     <>
@@ -43,10 +59,21 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
 				<div className={styles.inputContainer}>
-					<DropZone onVideoChange={handleVideoChange} loading={loading} setLoading={setLoading} imgURL={imgURL}/>
-					<input type="text" id="file-input" className={styles.textInput} placeholder="https://images.unsplash.com/photo-1679948205100-b4a9270b23ec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3087&q=80" />
+					<DropZone handleImgChange={handleImgChange} loading={loading} setLoading={setLoading} imgURL={imgURL}/>
+					<label htmlFor="text-input" className={styles.labelUrl}>or put the Url:</label>
+					<input type="text" id="text-input" handleInputChange={handleInputChange} className={styles.textInput} placeholder="https://images.unsplash.com/photo-1679948205100-b4a9270b23ec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3087&q=80" />
 				</div>
-				<button onClick={handleTranslate}>Translate</button>
+				<button onClick={handleDiscover}>Discover</button>
+				{spotyData && (
+					<div>
+						<p>{spotyData.title}</p>
+						<p>{spotyData.spotyUrl}</p>
+						<p>{spotyData.description}</p>
+					</div>
+				)}
+				<div>
+
+				</div>
       </main>
     </>
   )

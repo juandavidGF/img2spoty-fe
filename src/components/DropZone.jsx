@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import styles from '@/styles/DropZone.module.css';
 import { Upload as UploadIcon } from "lucide-react";
 import sleep from "../utils/sleep";
+import Image from 'next/image'
 
-const ImageDropZone = ({ onVideoChange, loading, setLoading, videoURL }) => {
+const ImageDropZone = ({ handleImgChange, loading, setLoading, imgURL }) => {
 
 	const [videoState, setVideoState] = useState("Upload the Image");
 
@@ -14,13 +15,13 @@ const ImageDropZone = ({ onVideoChange, loading, setLoading, videoURL }) => {
     const files = e.dataTransfer.files;
     if (files.length) {
       const file = files[0];
-      if (file.type.startsWith('video/')) {
+      if (file.type.startsWith('image/')) {
 				setLoading(true);
 				await sleep(3_000);
 				setLoading(false);
 				setVideoState("Uploaded")
         // Handle the image or video file here
-				onVideoChange(file);
+				handleImgChange(file);
       }
     }
   };
@@ -31,13 +32,13 @@ const ImageDropZone = ({ onVideoChange, loading, setLoading, videoURL }) => {
 
   const handleChange = async (e) => {
     const file = e.target.files[0];
-    if (file.type.startsWith('video/')) {
+    if (file.type.startsWith('image/')) {
 			setLoading(true);
 			await sleep(3_000);
 			setLoading(false);
-			setVideoState(" Video Uploaded")
+			setVideoState(" Image Uploaded")
       // Handle the image or video file here
-			onVideoChange(file);
+			handleImgChange(file);
     }
   };
 
@@ -54,11 +55,15 @@ const ImageDropZone = ({ onVideoChange, loading, setLoading, videoURL }) => {
           <div className={styles.circle}></div>
           <div className={styles.circle}></div>
         </div>
-      ) : videoURL ? (
-				<video src={videoURL} width={320} height={240} controls/>
+      ) : imgURL ? (
+				<Image 
+					src={imgURL} 
+					width={300}
+					height={300}
+				/>
 			) : (
 				<div>
-					<input type="file" id="file-input" className={styles.fileInput} accept="video/*" onChange={handleChange} />
+					<input type="file" id="file-input" className={styles.fileInput} accept="image/*" onChange={handleChange} />
 					<p>
 						<UploadIcon className="icon" />
 						{videoState}
